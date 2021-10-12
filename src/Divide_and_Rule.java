@@ -22,9 +22,11 @@ public class Divide_and_Rule {
         if(choice == 1){
             int temp;
             for(int i = 0; i < size; ++i){
-                temp = rand.nextInt() % 5;
-                System.out.print("\nelement[" + i + "] = " + temp);
+                temp = rand.nextInt() % 1500;
                 massiv.add(temp);
+            }
+            for(int i =0; i < massiv.size() && massiv.size() < 1000; ++i){
+                System.out.print("\nelement[" + i + "] = " + massiv.elementAt(i));
             }
         }
         else {
@@ -33,14 +35,31 @@ public class Divide_and_Rule {
                 massiv.add(scanner.nextInt());
             }
         }
-        int result = solve(0, size - 1);
-        System.out.println("\nResult: " + result);
+        for(int i = 0; i < 3; ++i){
+            long start = System.nanoTime();
+            int result = solve(0, size - 1);
+            long end  = System.nanoTime();
+            System.out.println("\nResult divide and rule: " + result + " Time: " + (end - start)/1000);
+            start = System.nanoTime();
+            result = n_solve();
+            end  = System.nanoTime();
+            System.out.println("\nResult native: " + result + " Time: " + (end - start)/1000);
+        }
     }
     private int solve(int start, int finish){
-        if(start == finish){
+        if(finish == start){
             return massiv.elementAt(start);
         }
         int mid = (start + finish) / 2;
-        return solve(start, mid) * solve(mid + 1, finish);
+        return Math.max(solve(start, mid), solve(mid + 1, finish));
+    }
+    private int n_solve(){
+        int max = massiv.elementAt(0);
+        for(int i: massiv){
+            if(max < i){
+                max = i;
+            }
+        }
+        return max;
     }
 }
